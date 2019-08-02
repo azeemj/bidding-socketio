@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Hello world</title>
+</head>
+<script src="/socket.io/socket.io.js"></script>
+<script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+<script>
+  var socket = io();
+  socket.on('broadcast', function (data) {
+    // document.body.innerHTML = '';
+    // document.write(data.description);
+  });
+
+  socket.on('bid', function (content) {
+    $('#bids').append("<br>" + content["username"] + " :" + content["amount"]);
+  });
+
+  socket.on('newMessage', function (content) {
+    $('#welcome').html("<br>" + content + "");
+  });
+
+
+  $(document).ready(function () {
+    $(".addToBoard").on('click', function () {
+
+      socket.emit('bid', {
+        "amount": $('#data').val(),
+        "username": $('#name').val()
+      });
+    });
+  });
+</script>
+
+<body>
+  <h1>Add to your price to bid</h1>
+  <div class="">
+    <div>
+      <label>Enter your name:</label>
+      <input type="text" id="name"></input></div>
+    <div>
+      <label>Enter your price:</label>
+      <input type="text" id="data"></input></div>
+    <div>
+      <label></label>
+      <a class='addToBoard' href="#" style="text-decoration: none">Please Click on me.</a>
+
+    </div>
+
+
+    <p id="welcome"></p>
+
+    <h1>Price list</h1>
+    <p id="bids"></p>
+
+  </div>
+
+</body>
+
+</html>
